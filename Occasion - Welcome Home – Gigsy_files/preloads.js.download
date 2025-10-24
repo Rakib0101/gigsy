@@ -1,0 +1,78 @@
+
+    (function() {
+      var cdnOrigin = "https://cdn.shopify.com";
+      var scripts = ["/cdn/shopifycloud/checkout-web/assets/c1/polyfills.-aDo65iI.js","/cdn/shopifycloud/checkout-web/assets/c1/app.33vpLNSB.js","/cdn/shopifycloud/checkout-web/assets/c1/locale-en.BDTtKe3v.js","/cdn/shopifycloud/checkout-web/assets/c1/page-OnePage.CnGcZF0f.js","/cdn/shopifycloud/checkout-web/assets/c1/LocalizationExtensionField.RfPQSCHu.js","/cdn/shopifycloud/checkout-web/assets/c1/ShopPayOptInDisclaimer.CMk8O8GK.js","/cdn/shopifycloud/checkout-web/assets/c1/MarketsProDisclaimer.DcxbedfM.js","/cdn/shopifycloud/checkout-web/assets/c1/StockProblemsLineItemList.D6ZkRKPk.js","/cdn/shopifycloud/checkout-web/assets/c1/DeliveryMethodSelectorSection.BpZ7lykb.js","/cdn/shopifycloud/checkout-web/assets/c1/useEditorShopPayNavigation.Ype6-jfc.js","/cdn/shopifycloud/checkout-web/assets/c1/VaultedPayment.D6kq7qmE.js","/cdn/shopifycloud/checkout-web/assets/c1/Section.D8B--Amr.js","/cdn/shopifycloud/checkout-web/assets/c1/SeparatePaymentsNotice.CBQpYDX3.js","/cdn/shopifycloud/checkout-web/assets/c1/ShipmentBreakdown.oG-tiDIn.js","/cdn/shopifycloud/checkout-web/assets/c1/MerchandiseModal.ClYP1fLi.js","/cdn/shopifycloud/checkout-web/assets/c1/StackedMerchandisePreview.C3l88BVI.js","/cdn/shopifycloud/checkout-web/assets/c1/component-ShopPayVerificationSwitch.tbOEz3xL.js","/cdn/shopifycloud/checkout-web/assets/c1/useSubscribeMessenger.Dv39_izw.js","/cdn/shopifycloud/checkout-web/assets/c1/index.Ccs5RV4s.js","/cdn/shopifycloud/checkout-web/assets/c1/PayButtonSection.DyTIUk5h.js"];
+      var styles = ["/cdn/shopifycloud/checkout-web/assets/c1/assets/app.DJnf3a9l.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/OnePage.Dx_lrSVd.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/DeliveryMethodSelectorSection.BvrdqG-K.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/useEditorShopPayNavigation.CBpWLJzT.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/VaultedPayment.OxMVm7u-.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/Section.ClWBj0Dy.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/StackedMerchandisePreview.CKAakmU8.css","/cdn/shopifycloud/checkout-web/assets/c1/assets/ShopPayVerificationSwitch.WW3cs_z5.css"];
+      var fontPreconnectUrls = [];
+      var fontPrefetchUrls = [];
+      var imgPrefetchUrls = ["https://cdn.shopify.com/s/files/1/0672/2699/2962/files/Gigsy_Logo_Wordmark_Signal_Pink_2x_9f319bd2-9c2a-4175-932e-ea2dfa5c0ff3_x320.png?v=1712071937"];
+
+      function preconnect(url, callback) {
+        var link = document.createElement('link');
+        link.rel = 'dns-prefetch preconnect';
+        link.href = url;
+        link.crossOrigin = '';
+        link.onload = link.onerror = callback;
+        document.head.appendChild(link);
+      }
+
+      function preconnectAssets() {
+        var resources = [cdnOrigin].concat(fontPreconnectUrls);
+        var index = 0;
+        (function next() {
+          var res = resources[index++];
+          if (res) preconnect(res, next);
+        })();
+      }
+
+      function prefetch(url, as, callback) {
+        var link = document.createElement('link');
+        if (link.relList.supports('prefetch')) {
+          link.rel = 'prefetch';
+          link.fetchPriority = 'low';
+          link.as = as;
+          if (as === 'font') link.type = 'font/woff2';
+          link.href = url;
+          link.crossOrigin = '';
+          link.onload = link.onerror = callback;
+          document.head.appendChild(link);
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', url, true);
+          xhr.onloadend = callback;
+          xhr.send();
+        }
+      }
+
+      function prefetchAssets() {
+        var resources = [].concat(
+          scripts.map(function(url) { return [url, 'script']; }),
+          styles.map(function(url) { return [url, 'style']; }),
+          fontPrefetchUrls.map(function(url) { return [url, 'font']; }),
+          imgPrefetchUrls.map(function(url) { return [url, 'image']; })
+        );
+        var index = 0;
+        function run() {
+          var res = resources[index++];
+          if (res) prefetch(res[0], res[1], next);
+        }
+        var next = (self.requestIdleCallback || setTimeout).bind(self, run);
+        next();
+      }
+
+      function onLoaded() {
+        try {
+          if (parseFloat(navigator.connection.effectiveType) > 2 && !navigator.connection.saveData) {
+            preconnectAssets();
+            prefetchAssets();
+          }
+        } catch (e) {}
+      }
+
+      if (document.readyState === 'complete') {
+        onLoaded();
+      } else {
+        addEventListener('load', onLoaded);
+      }
+    })();
+  
